@@ -4,7 +4,19 @@ import net from "net";
 console.log("Logs from your program will appear here!");
 
  const server = net.createServer((connection) => {
-   // Handle connection
+   
+    const messageSize = 4;
+    const correlationId = 7;
+
+    const buffer = Buffer.alloc(messageSize + 4);
+
+    buffer.writeUInt32BE(correlationId, messageSize);
+
+    connection.write(buffer);
+
+    connection.end();
  });
 
- server.listen(9092, "127.0.0.1");
+ server.listen(9092, "127.0.0.1", () => {
+    console.log("Server is listening on port 9092");
+ });
